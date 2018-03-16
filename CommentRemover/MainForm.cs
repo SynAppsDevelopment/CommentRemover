@@ -12,6 +12,9 @@ namespace CommentRemover
 			FBDialog.SelectedPath = FolderTextBox.Text;
 		}
 
+		private int FilesChanged = 0;
+		private int FilesChecked = 0;
+
 		private void RemoveCommentsButton_Click(object sender, EventArgs e)
 		{
 			const string FILE_EXT = "cs";
@@ -68,7 +71,7 @@ namespace CommentRemover
 					// 1. Don't modify designer files.
 					if (!FileName.EndsWith(".Designer." + FILE_EXT, StringComparison.CurrentCultureIgnoreCase) &&
 						// 2. Exclude folders.
-						!(FileName.Contains(@"\Properties\") ||
+						!(FileName.Contains(@"\Properties\") || // AssemblyInfo.cs
 						  FileName.Contains(@"\obj\") ||
 						  FileName.Contains(@"\bin\") ||
 						  FileName.Contains(@"\.vs\") ||
@@ -93,7 +96,7 @@ namespace CommentRemover
 				Cursor = Cursors.Default;
 			}
 
-			MessageBox.Show("Comments removed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBox.Show("Comments removed in " + FilesChanged.ToString() + " of " + FilesChecked.ToString() + " candidate of " + FileNames.Length.ToString() + " total files.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
 		private void RemoveComments(string FileName)
@@ -101,6 +104,7 @@ namespace CommentRemover
 			const string TWO_SLASH = "//";
 			const string DOUBLE_QUOTE = "\"";
 
+			FilesChecked++;
 			bool ChangedFile = false;
 
 			Int64 FileSize = new FileInfo(FileName).Length;
@@ -193,7 +197,10 @@ namespace CommentRemover
 			}
 
 			if (ChangedFile)
+			{
 				File.WriteAllText(FileName, sb.ToString());
+				FilesChanged++;
+			}
 		}
 
 		private void BrowseButton_Click(object sender, EventArgs e)
