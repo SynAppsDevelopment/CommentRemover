@@ -24,8 +24,8 @@ namespace CommentRemover
 
 			const string FILE_EXT = "cs";
 
-			int FilesChanged = 0;
-			int FilesChecked = 0;
+			FilesChanged = 0;
+			FilesChecked = 0;
 
 			if (String.IsNullOrWhiteSpace(FolderTextBox.Text))
 			{
