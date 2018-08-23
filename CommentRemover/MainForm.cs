@@ -6,20 +6,26 @@ namespace CommentRemover
 {
 	public partial class MainForm : Form
 	{
+		private int FilesChanged;
+		private int FilesChecked;
+
 		public MainForm()
 		{
 			InitializeComponent();
-			FBDialog.SelectedPath = FolderTextBox.Text;
+			if (!String.IsNullOrWhiteSpace(FolderTextBox.Text))
+				FBDialog.SelectedPath = FolderTextBox.Text;
 		}
-
-		private int FilesChanged = 0;
-		private int FilesChecked = 0;
 
 		private void RemoveCommentsButton_Click(object sender, EventArgs e)
 		{
-			const string FILE_EXT = "cs";
+			#region Initialization
 
 			Cursor = Cursors.WaitCursor;
+
+			const string FILE_EXT = "cs";
+
+			int FilesChanged = 0;
+			int FilesChecked = 0;
 
 			if (String.IsNullOrWhiteSpace(FolderTextBox.Text))
 			{
@@ -54,15 +60,16 @@ namespace CommentRemover
 
 			Cursor = Cursors.WaitCursor;
 
-			FilesProgressBar.Visible = true;
 			FilesProgressBar.Value = FilesProgressBar.Minimum;
+			FilesProgressBar.Maximum = FileNames.Length;
+			FilesProgressBar.Visible = true;
 
 			string ExFileName = null;
 
+			#endregion Initialization
+
 			try
 			{
-				FilesProgressBar.Maximum = FileNames.Length;
-
 				foreach (string FileName in FileNames)
 				{
 					ExFileName = FileName;
@@ -96,7 +103,7 @@ namespace CommentRemover
 				Cursor = Cursors.Default;
 			}
 
-			MessageBox.Show("Comments removed in " + FilesChanged.ToString() + " of " + FilesChecked.ToString() + " candidate of " + FileNames.Length.ToString() + " total files.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+			MessageBox.Show("Comments removed in " + FilesChanged + " files of " + FilesChecked + " examined files of " + FileNames.Length + " total files.", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
 		private void RemoveComments(string FileName)
@@ -207,11 +214,6 @@ namespace CommentRemover
 		{
 			if (DialogResult.OK == FBDialog.ShowDialog())
 				FolderTextBox.Text = FBDialog.SelectedPath;
-		}
-
-		private void CloseButton_Click(object sender, EventArgs e)
-		{
-			this.Close();
 		}
 
 	}
