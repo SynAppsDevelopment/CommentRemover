@@ -6,14 +6,18 @@ namespace CommentRemover
 {
 	public partial class MainForm : Form
 	{
+		private static readonly string AppRegistryKey = @"Software\SynApps\" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+		private SynApps.MruList FolderMruList;
+
 		private int FilesChanged;
 		private int FilesChecked;
 
 		public MainForm()
 		{
 			InitializeComponent();
-			if (!String.IsNullOrWhiteSpace(FolderTextBox.Text))
-				FBDialog.SelectedPath = FolderTextBox.Text;
+			FolderMruList = new SynApps.MruList(AppRegistryKey, FolderComboBox);
+			if (!String.IsNullOrWhiteSpace(FolderComboBox.Text))
+				FBDialog.SelectedPath = FolderComboBox.Text;
 		}
 
 		private void RemoveCommentsButton_Click(object sender, EventArgs e)
@@ -27,21 +31,23 @@ namespace CommentRemover
 			FilesChanged = 0;
 			FilesChecked = 0;
 
-			if (String.IsNullOrWhiteSpace(FolderTextBox.Text))
+			if (String.IsNullOrWhiteSpace(FolderComboBox.Text))
 			{
 				Cursor = Cursors.Default;
 				MessageBox.Show("Please select a solution folder.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
 			}
 
-			if (!Directory.Exists(FolderTextBox.Text))
+			if (!Directory.Exists(FolderComboBox.Text))
 			{
 				Cursor = Cursors.Default;
 				MessageBox.Show("This folder does not exist.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 
-			string[] FileNames = Directory.GetFiles(FolderTextBox.Text, "*." + FILE_EXT, SearchOption.AllDirectories);
+			FolderMruList.MoveControlTextToTop();
+
+			string[] FileNames = Directory.GetFiles(FolderComboBox.Text, "*." + FILE_EXT, SearchOption.AllDirectories);
 
 			if (0 == FileNames.Length)
 			{
@@ -213,7 +219,12 @@ namespace CommentRemover
 		private void BrowseButton_Click(object sender, EventArgs e)
 		{
 			if (DialogResult.OK == FBDialog.ShowDialog())
-				FolderTextBox.Text = FBDialog.SelectedPath;
+				FolderComboBox.Text = FBDialog.SelectedPath;
+		}
+
+		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			FolderMruList.Save();
 		}
 
 	}

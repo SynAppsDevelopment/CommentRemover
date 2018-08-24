@@ -30,11 +30,11 @@
 		{
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.FolderTextBox = new System.Windows.Forms.TextBox();
 			this.BrowseButton = new System.Windows.Forms.Button();
 			this.RemoveCommentsButton = new System.Windows.Forms.Button();
 			this.FBDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.FilesProgressBar = new System.Windows.Forms.ProgressBar();
+			this.FolderComboBox = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -58,13 +58,6 @@
 			this.label2.Size = new System.Drawing.Size(300, 17);
 			this.label2.TabIndex = 1;
 			this.label2.Text = "This folder and all subfolders will be searched.";
-			// 
-			// FolderTextBox
-			// 
-			this.FolderTextBox.Location = new System.Drawing.Point(142, 13);
-			this.FolderTextBox.Name = "FolderTextBox";
-			this.FolderTextBox.Size = new System.Drawing.Size(500, 23);
-			this.FolderTextBox.TabIndex = 2;
 			// 
 			// BrowseButton
 			// 
@@ -104,21 +97,30 @@
 			this.FilesProgressBar.Value = 1;
 			this.FilesProgressBar.Visible = false;
 			// 
+			// FolderComboBox
+			// 
+			this.FolderComboBox.FormattingEnabled = true;
+			this.FolderComboBox.Location = new System.Drawing.Point(142, 13);
+			this.FolderComboBox.Name = "FolderComboBox";
+			this.FolderComboBox.Size = new System.Drawing.Size(500, 24);
+			this.FolderComboBox.TabIndex = 14;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(742, 123);
+			this.Controls.Add(this.FolderComboBox);
 			this.Controls.Add(this.FilesProgressBar);
 			this.Controls.Add(this.RemoveCommentsButton);
 			this.Controls.Add(this.BrowseButton);
-			this.Controls.Add(this.FolderTextBox);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "MainForm";
 			this.Text = "C# Comment Remover";
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -128,11 +130,11 @@
 
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox FolderTextBox;
 		private System.Windows.Forms.Button BrowseButton;
 		private System.Windows.Forms.Button RemoveCommentsButton;
 		private System.Windows.Forms.FolderBrowserDialog FBDialog;
 		private System.Windows.Forms.ProgressBar FilesProgressBar;
+		private System.Windows.Forms.ComboBox FolderComboBox;
 	}
 }
 
